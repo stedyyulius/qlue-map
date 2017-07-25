@@ -30,7 +30,8 @@ class QlueMap extends Component {
     this.state={
       markers:{},
       waze: {},
-      icons: true
+      terminalIcons: true,
+      wazeIcons: true
     }
   }
   
@@ -39,9 +40,13 @@ class QlueMap extends Component {
       <div>      
       <div id='cssmenu'>
           <ul>
-            {(this.state.icons === true)
-            ? <li><a onClick={()=> this.icons()}><span>Clear Icons</span></a></li>
-            : <li><a onClick={()=> this.icons()}><span>Show Icons</span></a></li>
+            {(this.state.wazeIcons === true)
+            ? <li><a onClick={()=> this.wazeIcons()}><span>Clear Traffic</span></a></li>
+            : <li><a onClick={()=> this.wazeIcons()}><span>Show Traffic</span></a></li>
+            }
+            {(this.state.terminalIcons === true)
+            ? <li><a onClick={()=> this.terminalIcons()}><span>Clear Terminals</span></a></li>
+            : <li><a onClick={()=> this.terminalIcons()}><span>Show Terminals</span></a></li>
             }
 
           </ul>
@@ -51,7 +56,7 @@ class QlueMap extends Component {
             url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
-        {(this.state.markers.length > 0 && this.state.icons === true)
+        {(this.state.markers.length > 0 && this.state.terminalIcons === true)
          ?this.state.markers.map((m,index) => (
            <Marker
              key={index} 
@@ -68,7 +73,7 @@ class QlueMap extends Component {
         ))
         :<div></div>
       }
-        {(this.state.waze.length > 0 && this.state.icons === true)
+        {(this.state.waze.length > 0 && this.state.wazeIcons === true)
          ?this.state.waze.map((w,index) => (
            <Marker
              key={index} 
@@ -90,14 +95,26 @@ class QlueMap extends Component {
     )
   }
   
-  icons(){
-    if(this.state.icons === false){
+  wazeIcons(){
+    if(this.state.wazeIcons === false){
       this.setState({
-        icons: true
+        wazeIcons: true
       })
     } else{
       this.setState({
-        icons: false
+        wazeIcons: false
+      })
+    }
+  }
+  
+  terminalIcons(){
+    if(this.state.terminalIcons === false){
+      this.setState({
+        terminalIcons: true
+      })
+    } else{
+      this.setState({
+        terminalIcons: false
       })
     }
   }
