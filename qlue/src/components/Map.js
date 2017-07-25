@@ -15,7 +15,7 @@ var Terminal = icon({
 });
 
 var Traffic = icon({
-    iconUrl: 'https://s-media-cache-ak0.pinimg.com/originals/cd/44/f9/cd44f96b2ac5b7361bf53c77e2fd5d3d.png',
+    iconUrl: 'http://www.freeiconspng.com/uploads/traffic-icon-1.png',
     iconSize: [30, 30],
     iconAnchor: [22, 94],
     popupAnchor: [-3, -76],
@@ -29,19 +29,29 @@ class QlueMap extends Component {
     super(props)
     this.state={
       markers:{},
-      waze: {}
+      waze: {},
+      icons: true
     }
   }
   
   render(){
-    return(<div>
-        <button onClick={()=>this.tes()}>Tes</button>
+    return(
+      <div>      
+      <div id='cssmenu'>
+          <ul>
+            {(this.state.icons === true)
+            ? <li><a onClick={()=> this.icons()}><span>Clear Icons</span></a></li>
+            : <li><a onClick={()=> this.icons()}><span>Show Icons</span></a></li>
+            }
+
+          </ul>
+        </div>
         <Map center={Jakarta} zoom={12}>
           <TileLayer
             url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
-        {(this.state.markers.length > 0)
+        {(this.state.markers.length > 0 && this.state.icons === true)
          ?this.state.markers.map((m,index) => (
            <Marker
              key={index} 
@@ -56,10 +66,9 @@ class QlueMap extends Component {
             </Popup>
           </Marker>          
         ))
-        :<div><img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" 
-              alt="loading"/></div>
+        :<div></div>
       }
-        {(this.state.waze.length > 0)
+        {(this.state.waze.length > 0 && this.state.icons === true)
          ?this.state.waze.map((w,index) => (
            <Marker
              key={index} 
@@ -74,28 +83,34 @@ class QlueMap extends Component {
             </Popup>
           </Marker>          
         ))
-        :<div><img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" 
-              alt="loading"/></div>
+        :<div></div>
       }
-    </Map></div>
+    </Map>
+  </div>
     )
   }
   
-  tes(){
-    console.log(this.state.markers);
+  icons(){
+    if(this.state.icons === false){
+      this.setState({
+        icons: true
+      })
+    } else{
+      this.setState({
+        icons: false
+      })
+    }
   }
   
   componentWillMount(){
     axios.get(`http://www.qlue.co.id/vacancy/svc/getDataExample.php`)
     .then(terminals=>{
-      console.log(terminals.data);
       this.setState({
         markers: terminals.data
       })
     })
     axios.get(`http://waze.qlue.id/jakarta/update/0atxn84I3hx2WmNm5ifPDZkJaLERZD9A.json`)
     .then(waze=>{
-      console.log(waze.data.alerts[0].location.x);
       this.setState({
         waze: waze.data.alerts
       })
